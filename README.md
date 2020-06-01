@@ -1,5 +1,6 @@
-# Erlang Performance Comparison `maps:is_key` versus `lists:member`
-This is a script to compare the performance of `maps:is_key` versus `lists:member` used in a filter which filters a list of elements against a list of keys. Keys and elements are both all uuid strings.
+# Erlang Performance Comparison for Filtering
+
+This is a script to compare the performance of `maps:is_key` versus `lists:member` versus a binary search against a tuple used in a filter which filters a list of elements against a list of keys. Keys and elements are both all uuid strings.
 
 
 ## Requirements
@@ -18,7 +19,7 @@ This is my [data.ndjson](data.ndjson) and here is a plot:
 To run the performance test and generate the graph, run
 
 ```bash
-make graph.png
+make
 ```
 
 
