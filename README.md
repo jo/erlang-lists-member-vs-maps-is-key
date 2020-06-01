@@ -3,9 +3,9 @@ This is a script to compare the performance of `maps:is_key` versus `lists:membe
 
 
 ## Requirements
-Based on `escript`.
+The [run-perf-test script](run-perf-test) is based on `escript`.
 
-To generate the plot you need
+Apart from `erlang-erts` you need the following commands available in order to generate the plot:
 * jq
 * gnuplot
 
