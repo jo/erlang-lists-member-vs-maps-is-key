@@ -1,0 +1,92 @@
+#!/usr/bin/env escript
+
+v4() ->
+  v4(rand:uniform(round(math:pow(2, 48))) - 1, rand:uniform(round(math:pow(2, 12))) - 1, rand:uniform(round(math:pow(2, 32))) - 1, rand:uniform(round(math:pow(2, 30))) - 1).
+
+v4(R1, R2, R3, R4) ->
+    <<R1:48, 4:4, R2:12, 2:2, R3:32, R4: 30>>.
+
+% Returns a string representation of a binary UUID.
+to_string(U) ->
+    lists:flatten(io_lib:format("~8.16.0b-~4.16.0b-~4.16.0b-~2.16.0b~2.16.0b-~12.16.0b", get_parts(U))).
+
+% Returns the 32, 16, 16, 8, 8, 48 parts of a binary UUID.
+get_parts(<<TL:32, TM:16, THV:16, CSR:8, CSL:8, N:48>>) ->
+    [TL, TM, THV, CSR, CSL, N].
+
+% shortcut to create uuid string
+uuid() -> to_string(v4()).
+
+
+map_to_uuid([_|T]) -> [uuid()|map_to_uuid(T)];
+map_to_uuid([])    -> [].
+
+map_to_tuples([H|T]) -> [{H, 0}|map_to_tuples(T)];
+map_to_tuples([])    -> [].
+
+
+filter_list(Keys, Entry) ->
+    case lists:member(Entry, Keys) of
+        true ->
+            [Entry];
+        false ->
+            []
+    end.
+
+filter_map(Keys, Entry) ->
+    case maps:is_key(Entry, Keys) of
+        true ->
+            [Entry];
+        false ->
+            []
+    end.
+
+walk_entries(F, Keys, Entries) -> walk_entries(F, Keys, Entries, 0).
+walk_entries(_, _, [], Acc) -> Acc;
+walk_entries(F, Keys, [Entry|T], Acc) ->
+  F(Keys, Entry),
+  walk_entries(F, Keys, T, Acc+1).
+
+measure(F, Data) ->
+  Start = os:timestamp(),
+  F(),
+  io:format("~s \"time\": ~f }~n", [Data, timer:now_diff(os:timestamp(), Start) / 1000000]).
+
+
+run_list(Keys, Entries) ->
+  walk_entries(fun(K, E) -> filter_list(K, E) end, Keys, Entries).
+
+run_map(KeysList, Entries) ->
+  KeyTuples = map_to_tuples(KeysList),
+  Keys = maps:from_list(KeyTuples),
+  walk_entries(fun(K, E) -> filter_map(K, E) end, Keys, Entries).
+
+
+run_with_keys(Entries, NumKeys) ->
+  X = lists:seq(1, NumKeys),
+  Keys = map_to_uuid(X),
+  measure(fun() -> run_list(Keys, Entries) end, io_lib:format("{ \"entries\": ~B, \"keys\": ~B, \"type\": \"lists:member\",", [length(Entries), length(Keys)])),
+  measure(fun() -> run_map(Keys, Entries) end, io_lib:format("{ \"entries\": ~B, \"keys\": ~B, \"type\": \"maps:is_key\",", [length(Entries), length(Keys)])).
+
+
+run_with_entries(NumEntries) ->
+  X = lists:seq(1, NumEntries),
+  Entries = map_to_uuid(X),
+
+  run_with_keys(Entries, 1),
+  run_with_keys(Entries, 10),
+  run_with_keys(Entries, 100),
+  run_with_keys(Entries, 1000),
+  run_with_keys(Entries, 10000),
+  run_with_keys(Entries, 20000),
+  run_with_keys(Entries, 50000),
+  run_with_keys(Entries, 100000).
+
+
+main(_) ->
+  run_with_entries(1),
+  run_with_entries(10),
+  run_with_entries(100),
+  run_with_entries(1000),
+  run_with_entries(10000),
+  run_with_entries(100000).

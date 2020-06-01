@@ -1,0 +1,15 @@
+set term pngcairo size 1200,600
+set output 'graph.png'
+
+set xlabel "Number of entries"
+set ylabel "Time in s"
+
+set logscale x
+set logscale y
+set logscale cb
+set cblabel "Number of keys"
+
+plot 'lists-member.csv' using 1:3:2 title "lists:member" noenhanced with points palette pointsize 2 pointtype 5, \
+      'maps-is-key.csv' using 1:3:2 title "maps:is_key" noenhanced with points palette pointsize 2 pointtype 7
+
+set term x11

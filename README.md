@@ -1,24 +1,25 @@
 # Erlang Performance Comparison `maps:is_key` versus `lists:member`
+This is a script to compare the performance of `maps:is_key` versus `lists:member` used in a filter which filters a list of elements against a list of keys. Keys and elements are both all uuid strings.
 
-This my very first Erlang code, please beare with me :)
 
-I check a list of 20k keys against a list of 500k elements. The keys and elements are uuid strings.
+## Requirements
+Based on `escript`.
 
-### `lists:member` performance:
+To generate the plot you need
+* jq
+* gnuplot
+
+
+## Data gathered on my machine
+This is my [data.ndjson](data.ndjson) and here is a plot:
+
+![A graph showing a 3D plot of the data](graph.png)
+
+To run the performance test and generate the graph, run
+
 ```bash
-$ time ./listsmember
-
-real	3m18.681s
-user	3m9.926s
-sys	0m10.510s
+make graph.png
 ```
 
-### `maps:is_key` performance:
-```sh
-$ time ./mapsiskey 
 
-real	0m51.547s
-user	0m43.987s
-sys	0m10.051s
-[jo@linux-2 list-member]$ 
-```
+Made with passion for the couch © 2020 by Johannes
