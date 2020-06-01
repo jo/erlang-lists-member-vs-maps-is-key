@@ -1,4 +1,4 @@
-set term pngcairo size 800,1200
+set term pngcairo size 1200,1600
 set output 'graph.png'
 
 set xlabel "Number of entries"
