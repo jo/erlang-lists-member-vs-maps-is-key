@@ -11,6 +11,7 @@ set cblabel "Number of keys"
 
 plot 'lists-member.csv' using 1:3:2 title "lists:member" noenhanced with points palette pointsize 2 pointtype 5, \
       'maps-is-key.csv' using 1:3:2 title "maps:is_key" noenhanced with points palette pointsize 2 pointtype 7, \
-      'tuples-binary-search.csv' using 1:3:2 title "tuples:binary_search" noenhanced with points palette pointsize 2 pointtype 9
+      'tuples-binary-search.csv' using 1:3:2 title "tuples:binary_search" noenhanced with points palette pointsize 2 pointtype 9, \
+      'sets-is-element.csv' using 1:3:2 title "sets:is_element" noenhanced with points palette pointsize 2 pointtype 11
 
 set term x11

@@ -13,8 +13,11 @@ maps-is-key.csv: data.ndjson
 tuples-binary-search.csv: data.ndjson
 	cat data.ndjson | jq -c -r 'select(.type == "tuples:binary_search") | [.entries, .keys, .time] | join(", ")' > tuples-binary-search.csv
 
-graph.png: lists-member.csv maps-is-key.csv tuples-binary-search.csv
+sets-is-element.csv: data.ndjson
+	cat data.ndjson | jq -c -r 'select(.type == "sets:is_element") | [.entries, .keys, .time] | join(", ")' > sets-is-element.csv
+
+graph.png: lists-member.csv maps-is-key.csv tuples-binary-search.csv sets-is-element.csv
 	gnuplot plot.gpi
 
 clean:
-	rm -f data.ndjson lists-member.csv maps-is-key.csv tuples-binary-search.csv graph.png
+	rm -f data.ndjson lists-member.csv maps-is-key.csv tuples-binary-search.csv sets-is-element.csv graph.png

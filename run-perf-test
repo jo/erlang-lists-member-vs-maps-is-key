@@ -68,6 +68,14 @@ filter_tuple(Keys, Entry) ->
             []
     end.
 
+filter_set(Keys, Entry) ->
+    case sets:is_element(Entry, Keys) of
+        true ->
+            [Entry];
+        false ->
+            []
+    end.
+
 
 walk_entries(F, Keys, Entries) -> walk_entries(F, Keys, Entries, 0).
 walk_entries(_, _, [], Acc) -> Acc;
@@ -90,8 +98,13 @@ run_map(KeysList, Entries) ->
   walk_entries(fun(K, E) -> filter_map(K, E) end, Keys, Entries).
 
 run_tuple(KeysList, Entries) ->
-  Keys = list_to_tuple(KeysList),
+  SortedKeysList = lists:sort(KeysList),
+  Keys = list_to_tuple(SortedKeysList),
   walk_entries(fun(K, E) -> filter_tuple(K, E) end, Keys, Entries).
+
+run_set(KeysList, Entries) ->
+  Keys = sets:from_list(KeysList),
+  walk_entries(fun(K, E) -> filter_set(K, E) end, Keys, Entries).
 
 
 run_with_keys(Entries, NumKeys) ->
@@ -99,7 +112,8 @@ run_with_keys(Entries, NumKeys) ->
   Keys = map_to_uuid(X),
   measure(fun() -> run_list(Keys, Entries) end, io_lib:format("{ \"entries\": ~B, \"keys\": ~B, \"type\": \"lists:member\",", [length(Entries), length(Keys)])),
   measure(fun() -> run_map(Keys, Entries) end, io_lib:format("{ \"entries\": ~B, \"keys\": ~B, \"type\": \"maps:is_key\",", [length(Entries), length(Keys)])),
-  measure(fun() -> run_tuple(Keys, Entries) end, io_lib:format("{ \"entries\": ~B, \"keys\": ~B, \"type\": \"tuples:binary_search\",", [length(Entries), length(Keys)])).
+  measure(fun() -> run_tuple(Keys, Entries) end, io_lib:format("{ \"entries\": ~B, \"keys\": ~B, \"type\": \"tuples:binary_search\",", [length(Entries), length(Keys)])),
+  measure(fun() -> run_set(Keys, Entries) end, io_lib:format("{ \"entries\": ~B, \"keys\": ~B, \"type\": \"sets:is_element\",", [length(Entries), length(Keys)])).
 
 
 run_with_entries(NumEntries) ->
