@@ -1,0 +1,28 @@
+set term pngcairo size 1400,1200
+
+set output "image/types.png"
+
+set xlabel "Number of entries"
+set ylabel "Number of keys"
+
+set logscale cb
+set cblabel "Time in s"
+set cbrange [0.0001:100.0]
+set xrange [0:100000]
+set yrange [0:100000]
+
+set multiplot layout 2,2
+  set title "lists:member" noenhanced
+  plot "data/lists-member.csv" using 1:2:3 with image
+  
+  set title "maps:is_key" noenhanced
+  plot "data/maps-is-key.csv" using 1:2:3 with image
+  
+  set title "tuple:binary_search" noenhanced
+  plot "data/tuples-binary-search.csv" using 1:2:3 with image
+
+  set title "sets:is_element" noenhanced
+  plot "data/sets-is-element.csv" using 1:2:3 with image
+unset multiplot
+
+set term x11

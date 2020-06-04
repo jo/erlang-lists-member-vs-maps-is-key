@@ -11,11 +11,26 @@ Apart from `erlang-erts` you need the following commands available in order to g
 * gnuplot
 
 
-## Data gathered on my machine
-This is my [data.ndjson](data.ndjson) and here is a plot:
+## Data
+This is [data.ndjson](data.ndjson) generated on my machine and here are some plots:
 
-![A graph showing a 3D plot of the data](graph.png)
+### By Algorithm
+These heatmaps acts a bit like a fingerprint, you can gasp the performance for a specific algorithm:
 
+![A graph showing a heatmap for each algorithm](image/types.png)
+
+### With Fixed Keys
+Look at how the different algorithms behave with certain number of keys:
+
+![A graph showing a lineplot for certain number of keys](image/keys.png)
+
+### With Fixed Entries
+The othge way around:
+
+![A graph showing a lineplot for certain number of entries](image/entries.png)
+
+
+## Usage
 To run the performance test and generate the graph, run
 
 ```bash

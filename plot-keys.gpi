@@ -1,0 +1,37 @@
+set term pngcairo size 1400,1800
+
+set output "image/keys.png"
+
+set xlabel "Number of Entries"
+set ylabel "Time in s"
+
+set logscale x
+set logscale y
+
+set multiplot layout 4,1
+  set title "100 Keys"
+  plot "data/100-keys.csv" using 1:2 title "lists:member" noenhanced with line lc "red", \
+                        "" using 1:3 title "maps:is_key" noenhanced with line lc "green", \
+                        "" using 1:4 title "tuples:binary_search" noenhanced with line lc "blue", \
+                        "" using 1:5 title "sets:is_element" noenhanced with line lc "orange"
+
+  set title "1k Keys"
+  plot "data/1000-keys.csv" using 1:2 title "lists:member" noenhanced with line lc "red", \
+                         "" using 1:3 title "maps:is_key" noenhanced with line lc "green", \
+                         "" using 1:4 title "tuples:binary_search" noenhanced with line lc "blue", \
+                         "" using 1:5 title "sets:is_element" noenhanced with line lc "orange"
+
+  set title "10k Keys"
+  plot "data/10000-keys.csv" using 1:2 title "lists:member" noenhanced with line lc "red", \
+                          "" using 1:3 title "maps:is_key" noenhanced with line lc "green", \
+                          "" using 1:4 title "tuples:binary_search" noenhanced with line lc "blue", \
+                          "" using 1:5 title "sets:is_element" noenhanced with line lc "orange"
+
+  set title "100k Keys"
+  plot "data/100000-keys.csv" using 1:2 title "lists:member" noenhanced with line lc "red", \
+                           "" using 1:3 title "maps:is_key" noenhanced with line lc "green", \
+                           "" using 1:4 title "tuples:binary_search" noenhanced with line lc "blue", \
+                           "" using 1:5 title "sets:is_element" noenhanced with line lc "orange"
+unset multiplot
+
+set term x11
