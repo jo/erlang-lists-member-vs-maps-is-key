@@ -1,4 +1,4 @@
-set term pngcairo size 1400,1800
+set term pngcairo size 1400,2200
 
 set output "image/entries.png"
 
@@ -8,7 +8,19 @@ set ylabel "Time in s"
 set logscale x
 set logscale y
 
-set multiplot layout 4,1
+set multiplot layout 5,1
+  set title "1 Entry"
+  plot "data/1-entry.csv" using 1:2 title "lists:member" noenhanced with line lc "red", \
+                       "" using 1:3 title "maps:is_key" noenhanced with line lc "green", \
+                       "" using 1:4 title "tuples:binary_search" noenhanced with line lc "blue", \
+                       "" using 1:5 title "sets:is_element" noenhanced with line lc "orange"
+
+  set title "10 Entries"
+  plot "data/10-entries.csv" using 1:2 title "lists:member" noenhanced with line lc "red", \
+                          "" using 1:3 title "maps:is_key" noenhanced with line lc "green", \
+                          "" using 1:4 title "tuples:binary_search" noenhanced with line lc "blue", \
+                          "" using 1:5 title "sets:is_element" noenhanced with line lc "orange"
+
   set title "100 Entries"
   plot "data/100-entries.csv" using 1:2 title "lists:member" noenhanced with line lc "red", \
                            "" using 1:3 title "maps:is_key" noenhanced with line lc "green", \
@@ -26,12 +38,6 @@ set multiplot layout 4,1
                              "" using 1:3 title "maps:is_key" noenhanced with line lc "green", \
                              "" using 1:4 title "tuples:binary_search" noenhanced with line lc "blue", \
                              "" using 1:5 title "sets:is_element" noenhanced with line lc "orange"
-
-  set title "100k Entries"
-  plot "data/100000-entries.csv" using 1:2 title "lists:member" noenhanced with line lc "red", \
-                              "" using 1:3 title "maps:is_key" noenhanced with line lc "green", \
-                              "" using 1:4 title "tuples:binary_search" noenhanced with line lc "blue", \
-                              "" using 1:5 title "sets:is_element" noenhanced with line lc "orange"
 unset multiplot
 
 set term x11

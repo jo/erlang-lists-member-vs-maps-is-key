@@ -20,6 +20,18 @@ data/sets-is-element.csv: data/data.ndjson
 data/types: data/lists-member.csv data/maps-is-key.csv data/tuples-binary-search.csv data/sets-is-element.csv
 
 
+data/1-entry.csv: data/data.ndjson
+	cat data/data.ndjson \
+		| jq 'select(.entries == 1)' \
+		| jq -r -s '. | group_by(.keys) | .[] | [.[0].keys, .[0].time, .[1].time, .[2].time, .[3].time ] | join(", ")' \
+		> data/1-entry.csv
+
+data/10-entries.csv: data/data.ndjson
+	cat data/data.ndjson \
+		| jq 'select(.entries == 10)' \
+		| jq -r -s '. | group_by(.keys) | .[] | [.[0].keys, .[0].time, .[1].time, .[2].time, .[3].time ] | join(", ")' \
+		> data/10-entries.csv
+
 data/100-entries.csv: data/data.ndjson
 	cat data/data.ndjson \
 		| jq 'select(.entries == 100)' \
@@ -38,14 +50,14 @@ data/10000-entries.csv: data/data.ndjson
 		| jq -r -s '. | group_by(.keys) | .[] | [.[0].keys, .[0].time, .[1].time, .[2].time, .[3].time ] | join(", ")' \
 		> data/10000-entries.csv
 
-data/100000-entries.csv: data/data.ndjson
+data/entries: data/1-entry.csv data/10-entries.csv data/100-entries.csv data/1000-entries.csv data/10000-entries.csv
+
+
+data/10-keys.csv: data/data.ndjson
 	cat data/data.ndjson \
-		| jq 'select(.entries == 100000)' \
-		| jq -r -s '. | group_by(.keys) | .[] | [.[0].keys, .[0].time, .[1].time, .[2].time, .[3].time ] | join(", ")' \
-		> data/100000-entries.csv
-
-data/entries: data/100-entries.csv data/1000-entries.csv data/10000-entries.csv data/100000-entries.csv
-
+		| jq 'select(.keys == 10)' \
+		| jq -r -s '. | group_by(.entries) | .[] | [.[0].entries, .[0].time, .[1].time, .[2].time, .[3].time ] | join(", ")' \
+		> data/10-keys.csv
 
 data/100-keys.csv: data/data.ndjson
 	cat data/data.ndjson \
@@ -71,7 +83,7 @@ data/100000-keys.csv: data/data.ndjson
 		| jq -r -s '. | group_by(.entries) | .[] | [.[0].entries, .[0].time, .[1].time, .[2].time, .[3].time ] | join(", ")' \
 		> data/100000-keys.csv
 
-data/keys: data/100-keys.csv data/1000-keys.csv data/10000-keys.csv data/100000-keys.csv
+data/keys: data/10-keys.csv data/100-keys.csv data/1000-keys.csv data/10000-keys.csv data/100000-keys.csv
 
 
 image/types.png: data/types

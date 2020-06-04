@@ -107,33 +107,32 @@ run_set(KeysList, Entries) ->
   walk_entries(fun(K, E) -> filter_set(K, E) end, Keys, Entries).
 
 
-run_with_keys(Entries, NumKeys) ->
-  X = lists:seq(1, NumKeys),
-  Keys = map_to_uuid(X),
+run_with_keys(Entries, Keys) ->
   measure(fun() -> run_list(Keys, Entries) end, io_lib:format("{ \"entries\": ~B, \"keys\": ~B, \"type\": \"lists:member\",", [length(Entries), length(Keys)])),
   measure(fun() -> run_map(Keys, Entries) end, io_lib:format("{ \"entries\": ~B, \"keys\": ~B, \"type\": \"maps:is_key\",", [length(Entries), length(Keys)])),
   measure(fun() -> run_tuple(Keys, Entries) end, io_lib:format("{ \"entries\": ~B, \"keys\": ~B, \"type\": \"tuples:binary_search\",", [length(Entries), length(Keys)])),
   measure(fun() -> run_set(Keys, Entries) end, io_lib:format("{ \"entries\": ~B, \"keys\": ~B, \"type\": \"sets:is_element\",", [length(Entries), length(Keys)])).
 
+take(N, List) ->
+  {SubList, _} = lists:split(N, List),
+  SubList. 
 
-run_with_entries(NumEntries) ->
-  X = lists:seq(1, NumEntries),
-  Entries = map_to_uuid(X),
-
-  run_with_keys(Entries, 1),
-  run_with_keys(Entries, 10),
-  run_with_keys(Entries, 100),
-  run_with_keys(Entries, 1000),
-  run_with_keys(Entries, 10000),
-  run_with_keys(Entries, 20000),
-  run_with_keys(Entries, 50000),
-  run_with_keys(Entries, 100000).
+run_with_entries(Entries, Keys) ->
+  run_with_keys(Entries, take(10, Keys)),
+  run_with_keys(Entries, take(100, Keys)),
+  run_with_keys(Entries, take(1000, Keys)),
+  run_with_keys(Entries, take(10000, Keys)),
+  run_with_keys(Entries, take(100000, Keys)).
 
 
 main(_) ->
-  run_with_entries(1),
-  run_with_entries(10),
-  run_with_entries(100),
-  run_with_entries(1000),
-  run_with_entries(10000),
-  run_with_entries(100000).
+  X = lists:seq(1, 100000),
+  
+  Entries = map_to_uuid(X),
+  Keys = map_to_uuid(X),
+
+  run_with_entries(take(1, Entries), Keys),
+  run_with_entries(take(10, Entries), Keys),
+  run_with_entries(take(100, Entries), Keys),
+  run_with_entries(take(1000, Entries), Keys),
+  run_with_entries(take(10000, Entries), Keys).

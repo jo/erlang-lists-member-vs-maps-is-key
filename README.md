@@ -20,12 +20,12 @@ These heatmaps acts a bit like a fingerprint, you can gasp the performance for a
 ![A graph showing a heatmap for each algorithm](image/types.png)
 
 ### With Fixed Keys
-Look at how the different algorithms behave with certain number of keys:
+Look at how the different algorithms behave with certain number of keys, time per keys and algorithm:
 
 ![A graph showing a lineplot for certain number of keys](image/keys.png)
 
 ### With Fixed Entries
-The othge way around:
+The other way around, time per docs and algorithm:
 
 ![A graph showing a lineplot for certain number of entries](image/entries.png)
 
