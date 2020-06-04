@@ -83,10 +83,19 @@ walk_entries(F, Keys, [Entry|T], Acc) ->
   F(Keys, Entry),
   walk_entries(F, Keys, T, Acc+1).
 
-measure(F, Data) ->
+measure_one(F) ->
   Start = os:timestamp(),
   F(),
-  io:format("~s \"time\": ~f }~n", [Data, timer:now_diff(os:timestamp(), Start) / 1000000]).
+  timer:now_diff(os:timestamp(), Start).
+
+measure_n(F, N) ->
+  X = lists:seq(1, N),
+  Time = lists:foldl(fun(_, Sum) -> Sum + measure_one(F) end, 0, X),
+  Time/N.
+
+measure(F, Description) ->
+  Time = measure_n(F, 16),
+  io:format("~s \"time\": ~f }~n", [Description, Time/1000000]).
 
 
 run_list(Keys, Entries) ->
